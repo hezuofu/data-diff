@@ -27,6 +27,7 @@
         <jackson.version>2.16.1</jackson.version>
         <fastutil.version>8.5.13</fastutil.version>
         <jool.version>0.9.14</jool.version>
+        <snakeyaml.version>2.2</snakeyaml.version>
         <slf4j.version>2.0.11</slf4j.version>
         <log4j.version>2.22.1</log4j.version>
         <testcontainers.version>1.19.4</testcontainers.version>
@@ -58,6 +59,13 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- YAML Configuration -->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${snakeyaml.version}</version>
         </dependency>
 
         <!-- High-performance Collections & Hash -->
@@ -153,6 +161,41 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>io.sketch.datadiff.DataDiffApplication</mainClass>
+                                    <manifestEntries>
+                                        <Implementation-Title>Data Diff</Implementation-Title>
+                                        <Implementation-Version>${project.version}</Implementation-Version>
+                                        <Author>lanxia39@163.com</Author>
+                                    </manifestEntries>
+                                </transformer>
+                            </transformers>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

@@ -1,0 +1,50 @@
+# Data Diff Configuration
+# Author: lanxia39@163.com
+
+# Left database configuration
+left:
+  url: jdbc:mysql://localhost:3306/database1
+  username: root
+  password: your_password
+  driver: com.mysql.cj.jdbc.Driver
+  table: users
+  primaryKey:
+    - id
+  excludeColumns:
+    - updated_at
+    - created_at
+  maxConnections: 10
+
+# Right database configuration
+right:
+  url: jdbc:mysql://localhost:3306/database2
+  username: root
+  password: your_password
+  driver: com.mysql.cj.jdbc.Driver
+  table: users
+  primaryKey:
+    - id
+  excludeColumns:
+    - updated_at
+    - created_at
+  maxConnections: 10
+
+# Comparison settings
+comparison:
+  algorithm: hashdiff  # hashdiff or joindiff
+  segmentSize: 50000
+  parallelism: 4
+  maxBisectionDepth: 10
+  numericTolerance: 0.001
+  caseInsensitive: false
+  customComparators:
+    # Custom comparator mappings (optional)
+    # status: string
+    # amount: numeric
+
+# Output settings
+output:
+  format: json  # json, csv, table, or stats
+  outputFile: diff-result.json  # Optional, prints to console if not specified
+  showStats: true
+  maxRecords: 1000
