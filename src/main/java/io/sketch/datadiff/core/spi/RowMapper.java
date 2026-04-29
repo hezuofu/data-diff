@@ -9,7 +9,7 @@ import java.util.Map;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 @FunctionalInterface
 public interface RowMapper {

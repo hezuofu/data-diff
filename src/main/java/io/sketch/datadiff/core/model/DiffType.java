@@ -5,7 +5,7 @@ package io.sketch.datadiff.core.model;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public enum DiffType {
     /** Row exists only in left table */

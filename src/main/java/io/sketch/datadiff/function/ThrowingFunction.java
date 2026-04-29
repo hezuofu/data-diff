@@ -5,7 +5,7 @@ package io.sketch.datadiff.function;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 @FunctionalInterface
 public interface ThrowingFunction<T, R, E extends Exception> {

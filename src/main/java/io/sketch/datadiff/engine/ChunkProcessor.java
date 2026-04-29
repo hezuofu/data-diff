@@ -19,7 +19,7 @@ import java.util.concurrent.Callable;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public class ChunkProcessor implements Callable<List<DiffRecord>> {
     

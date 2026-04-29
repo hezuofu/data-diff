@@ -7,7 +7,7 @@ import io.sketch.datadiff.engine.SegmentSplitter;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public class IdRangeCalculator {
     

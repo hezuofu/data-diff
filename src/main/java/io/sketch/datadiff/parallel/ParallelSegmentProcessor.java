@@ -13,7 +13,7 @@ import java.util.concurrent.*;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public class ParallelSegmentProcessor implements AutoCloseable {
     

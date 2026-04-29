@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public class SegmentSplitter implements SplitStrategy {
     

@@ -11,7 +11,7 @@ import java.io.PrintWriter;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public class StatsFormatter implements ResultFormatter {
     

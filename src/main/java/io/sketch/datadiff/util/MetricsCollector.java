@@ -8,7 +8,7 @@ import java.time.Instant;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public class MetricsCollector {
     

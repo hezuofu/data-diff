@@ -12,7 +12,7 @@ import java.io.PrintStream;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public class TableFormatter implements ResultFormatter {
     

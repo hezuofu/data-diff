@@ -8,7 +8,7 @@ import io.sketch.datadiff.datasource.dialect.SqlDialect;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 @FunctionalInterface
 public interface OrderingStrategy {

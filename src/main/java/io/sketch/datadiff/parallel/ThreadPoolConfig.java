@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public class ThreadPoolConfig {
     

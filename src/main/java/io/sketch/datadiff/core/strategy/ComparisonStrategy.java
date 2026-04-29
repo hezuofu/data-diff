@@ -10,7 +10,7 @@ import javax.sql.DataSource;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public interface ComparisonStrategy {
     

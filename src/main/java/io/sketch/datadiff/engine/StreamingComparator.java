@@ -20,7 +20,7 @@ import java.util.concurrent.Future;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public class StreamingComparator {
     

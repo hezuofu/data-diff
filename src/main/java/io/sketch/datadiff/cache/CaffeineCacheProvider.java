@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public class CaffeineCacheProvider {
     

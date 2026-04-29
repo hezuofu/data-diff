@@ -5,7 +5,7 @@ package io.sketch.datadiff.comparator;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public class NumericToleranceComparator {
     

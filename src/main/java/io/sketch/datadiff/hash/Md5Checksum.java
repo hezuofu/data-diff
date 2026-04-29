@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public class Md5Checksum implements ChecksumCalculator {
     

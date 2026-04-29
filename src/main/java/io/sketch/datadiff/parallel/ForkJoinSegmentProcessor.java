@@ -14,7 +14,7 @@ import java.util.concurrent.RecursiveTask;
  *
  * @author lanxia39@163.com
  *
- * @author lanxia39@163.com
+ * 
  */
 public class ForkJoinSegmentProcessor implements AutoCloseable {
     
