@@ -12,6 +12,10 @@ import java.util.Map;
 
 /**
  * JSON formatter for diff results using Jackson.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class JsonFormatter implements ResultFormatter {
     

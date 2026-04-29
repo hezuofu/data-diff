@@ -18,6 +18,10 @@ import java.util.Map;
 
 /**
  * Recursive bisector for locating differing rows through binary search.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class RecursiveBisector {
     

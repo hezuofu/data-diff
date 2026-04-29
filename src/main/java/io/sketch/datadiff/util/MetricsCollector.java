@@ -5,6 +5,10 @@ import java.time.Instant;
 
 /**
  * Utility for collecting metrics during comparison.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class MetricsCollector {
     

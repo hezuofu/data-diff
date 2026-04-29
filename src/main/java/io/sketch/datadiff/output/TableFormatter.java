@@ -9,6 +9,10 @@ import java.io.PrintStream;
 
 /**
  * Table formatter for console-friendly output.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class TableFormatter implements ResultFormatter {
     

@@ -5,6 +5,10 @@ import java.util.List;
 
 /**
  * Service Provider Interface for checksum calculation.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public interface ChecksumCalculator {
     

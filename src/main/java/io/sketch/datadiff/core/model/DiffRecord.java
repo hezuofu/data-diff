@@ -10,6 +10,8 @@ import java.util.Map;
  * @param rightData row data from right table (null if RIGHT_ONLY)
  * @param diffType type of difference
  * @param differingColumns list of column names that differ (for MODIFIED type)
+ *
+ * @author lanxia39@163.com
  */
 public record DiffRecord(
     Map<String, Object> primaryKey,

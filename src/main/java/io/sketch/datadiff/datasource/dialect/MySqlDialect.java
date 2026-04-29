@@ -5,6 +5,10 @@ import java.util.stream.Collectors;
 
 /**
  * MySQL SQL dialect implementation.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class MySqlDialect extends AbstractSqlDialect {
     

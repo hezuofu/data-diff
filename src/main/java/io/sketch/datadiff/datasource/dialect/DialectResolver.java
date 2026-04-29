@@ -7,6 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Resolver for SQL dialects based on JDBC URL.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class DialectResolver {
     

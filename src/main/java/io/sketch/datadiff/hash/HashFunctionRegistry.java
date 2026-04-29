@@ -7,6 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Registry for hash functions with runtime extensibility.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class HashFunctionRegistry {
     

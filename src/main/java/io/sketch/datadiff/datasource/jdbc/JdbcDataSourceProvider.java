@@ -12,6 +12,10 @@ import java.util.Properties;
 
 /**
  * JDBC data source provider implementation.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class JdbcDataSourceProvider implements DataSourceProvider {
     

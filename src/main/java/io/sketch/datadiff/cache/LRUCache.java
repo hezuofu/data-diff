@@ -6,6 +6,10 @@ import java.util.Map;
 
 /**
  * Simple LRU cache implementation (zero-dependency alternative).
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class LRUCache {
     

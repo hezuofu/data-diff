@@ -10,6 +10,8 @@ import java.util.List;
  * @param columns list of column definitions
  * @param primaryKey primary key column name(s)
  * @param indexes list of indexed column names
+ *
+ * @author lanxia39@163.com
  */
 public record TableInfo(
     String tableName,

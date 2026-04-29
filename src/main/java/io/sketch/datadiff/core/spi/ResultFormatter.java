@@ -5,6 +5,10 @@ import java.io.OutputStream;
 
 /**
  * Service Provider Interface for formatting diff results.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public interface ResultFormatter {
     

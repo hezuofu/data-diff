@@ -5,6 +5,10 @@ import java.util.Set;
 
 /**
  * Configuration options for comparison operations.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class CompareOptions {
     

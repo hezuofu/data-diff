@@ -5,6 +5,10 @@ import io.sketch.datadiff.datasource.dialect.SqlDialect;
 
 /**
  * Strategy interface for ordering rows during comparison.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 @FunctionalInterface
 public interface OrderingStrategy {

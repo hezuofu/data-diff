@@ -23,6 +23,10 @@ import java.util.concurrent.Future;
 
 /**
  * Hash-based diff engine using checksums and recursive bisection.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class HashDiffEngine implements ComparisonStrategy {
     

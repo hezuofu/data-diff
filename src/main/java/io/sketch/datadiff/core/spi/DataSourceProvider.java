@@ -7,6 +7,10 @@ import io.sketch.datadiff.datasource.dialect.SqlDialect;
 /**
  * Service Provider Interface for data source connections.
  * Implementations should be registered via META-INF/services/com.datadiff.core.spi.DataSourceProvider
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public interface DataSourceProvider {
     

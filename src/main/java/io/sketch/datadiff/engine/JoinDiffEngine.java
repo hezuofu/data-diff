@@ -17,6 +17,10 @@ import java.util.*;
 /**
  * JOIN-based diff engine using FULL OUTER JOIN for comparison.
  * More efficient for same-database comparisons.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class JoinDiffEngine implements ComparisonStrategy {
     

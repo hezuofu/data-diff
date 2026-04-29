@@ -2,6 +2,10 @@ package io.sketch.datadiff.comparator;
 
 /**
  * String normalizing comparator for case-insensitive and whitespace-tolerant comparisons.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class StringNormalizingComparator {
     

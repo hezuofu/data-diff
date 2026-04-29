@@ -10,6 +10,10 @@ import javax.sql.DataSource;
 
 /**
  * Builder for DataDiffEngine with fluent API.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class DataDiffBuilder {
     

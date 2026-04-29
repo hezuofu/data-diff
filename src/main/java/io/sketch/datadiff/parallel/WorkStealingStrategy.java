@@ -12,6 +12,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Work-stealing strategy for dynamic load balancing.
  * Idle workers steal tasks from busy workers' queues.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class WorkStealingStrategy implements AutoCloseable {
     

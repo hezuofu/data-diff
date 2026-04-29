@@ -10,6 +10,8 @@ import java.math.BigInteger;
  * @param count estimated row count in this segment
  * @param checksum pre-computed checksum (optional, may be null)
  * @param depth recursion depth for bisection
+ *
+ * @author lanxia39@163.com
  */
 public record Segment(
     BigInteger rangeStart,

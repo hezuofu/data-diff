@@ -8,6 +8,10 @@ import java.util.Map;
 
 /**
  * Row-level comparator that compares entire rows.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class RowComparator {
     

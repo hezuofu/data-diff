@@ -7,6 +7,10 @@ import java.util.List;
 
 /**
  * Composite checksum that combines multiple calculators for better distribution.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class CompositeChecksum implements ChecksumCalculator {
     

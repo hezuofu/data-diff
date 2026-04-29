@@ -18,6 +18,10 @@ import java.util.stream.StreamSupport;
 /**
  * Partition reader for streaming large table reads in chunks.
  * Avoids loading entire table into memory.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class PartitionReader implements AutoCloseable {
     

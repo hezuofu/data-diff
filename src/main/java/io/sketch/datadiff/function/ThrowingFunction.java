@@ -2,6 +2,10 @@ package io.sketch.datadiff.function;
 
 /**
  * Functional interface for functions that may throw checked exceptions.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 @FunctionalInterface
 public interface ThrowingFunction<T, R, E extends Exception> {

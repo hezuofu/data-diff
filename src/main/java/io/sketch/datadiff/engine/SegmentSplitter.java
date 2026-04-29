@@ -9,6 +9,10 @@ import java.util.List;
 
 /**
  * Segment splitter that divides data ranges into manageable chunks.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class SegmentSplitter implements SplitStrategy {
     

@@ -9,6 +9,10 @@ import java.util.function.Function;
 /**
  * Row publisher for reactive streaming of diff results.
  * Implements Flow.Publisher for backpressure support.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class RowPublisher implements Flow.Publisher<DiffRecord>, AutoCloseable {
     

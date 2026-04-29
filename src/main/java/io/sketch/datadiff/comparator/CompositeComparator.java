@@ -10,6 +10,10 @@ import java.util.Map;
 
 /**
  * Composite comparator that applies different comparators based on column types.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class CompositeComparator {
     

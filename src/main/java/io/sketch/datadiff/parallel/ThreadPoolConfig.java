@@ -9,6 +9,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Thread pool configuration utility.
  * Provides pre-configured thread pools for different scenarios.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class ThreadPoolConfig {
     

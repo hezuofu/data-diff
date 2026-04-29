@@ -6,6 +6,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Backpressure manager for controlling memory usage during streaming.
  * Implements simple threshold-based backpressure.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class BackpressureManager {
     

@@ -6,6 +6,8 @@ package io.sketch.datadiff.core.model;
  * @param name column name
  * @param dataType SQL data type (e.g., VARCHAR, INTEGER, TIMESTAMP)
  * @param nullable whether column allows NULL values
+ *
+ * @author lanxia39@163.com
  */
 public record ColumnDef(
     String name,

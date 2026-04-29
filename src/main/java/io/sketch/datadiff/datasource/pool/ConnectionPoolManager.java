@@ -8,6 +8,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Connection pool manager for multiple data sources.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class ConnectionPoolManager implements AutoCloseable {
     

@@ -8,6 +8,10 @@ import java.util.zip.CRC32;
 
 /**
  * CRC32-based checksum calculator (simple and fast).
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class Crc32Checksum implements ChecksumCalculator {
     

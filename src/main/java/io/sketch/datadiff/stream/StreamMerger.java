@@ -8,6 +8,10 @@ import java.util.function.Function;
 /**
  * Stream merger for combining multiple sorted diff streams.
  * Uses k-way merge algorithm for efficient merging.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class StreamMerger {
     

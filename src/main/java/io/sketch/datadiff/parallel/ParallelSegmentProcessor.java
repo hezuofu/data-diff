@@ -10,6 +10,10 @@ import java.util.concurrent.*;
 /**
  * Parallel segment processor using thread pool.
  * Processes multiple segments concurrently.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class ParallelSegmentProcessor implements AutoCloseable {
     

@@ -6,6 +6,10 @@ import java.util.Map;
 
 /**
  * Comparison result containing diff records and statistics.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class DiffResult {
     

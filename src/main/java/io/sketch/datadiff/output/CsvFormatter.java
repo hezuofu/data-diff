@@ -9,6 +9,10 @@ import java.io.PrintWriter;
 
 /**
  * CSV formatter for diff results.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class CsvFormatter implements ResultFormatter {
     

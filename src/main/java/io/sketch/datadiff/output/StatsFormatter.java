@@ -8,6 +8,10 @@ import java.io.PrintWriter;
 
 /**
  * Statistics formatter for comparison summary.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class StatsFormatter implements ResultFormatter {
     

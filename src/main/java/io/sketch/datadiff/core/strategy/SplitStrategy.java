@@ -6,6 +6,10 @@ import java.util.List;
 
 /**
  * Strategy interface for splitting data into segments.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 @FunctionalInterface
 public interface SplitStrategy {

@@ -7,6 +7,10 @@ import javax.sql.DataSource;
 
 /**
  * Strategy interface for comparison algorithms.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public interface ComparisonStrategy {
     

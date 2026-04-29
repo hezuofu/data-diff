@@ -4,6 +4,10 @@ import io.sketch.datadiff.core.model.CompareOptions;
 
 /**
  * Column-level comparator with support for tolerance and normalization.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class ColumnComparator {
     

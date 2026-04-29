@@ -16,6 +16,10 @@ import java.util.concurrent.Callable;
 /**
  * Chunk processor for parallel segment comparison.
  * Processes individual data chunks and returns diff results.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class ChunkProcessor implements Callable<List<DiffRecord>> {
     

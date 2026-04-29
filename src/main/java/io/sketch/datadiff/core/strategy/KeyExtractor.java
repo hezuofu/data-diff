@@ -5,6 +5,10 @@ import java.math.BigInteger;
 
 /**
  * Strategy interface for extracting primary key values from row data.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 @FunctionalInterface
 public interface KeyExtractor {

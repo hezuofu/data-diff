@@ -9,6 +9,10 @@ import java.util.Map;
 
 /**
  * JDBC query executor for executing SQL queries and mapping results.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class JdbcQueryExecutor {
     

@@ -2,6 +2,10 @@ package io.sketch.datadiff.comparator;
 
 /**
  * Numeric tolerance comparator for floating-point comparisons.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class NumericToleranceComparator {
     

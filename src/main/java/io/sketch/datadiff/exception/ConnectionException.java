@@ -2,6 +2,10 @@ package io.sketch.datadiff.exception;
 
 /**
  * Exception thrown when database connection fails.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class ConnectionException extends DataDiffException {
     

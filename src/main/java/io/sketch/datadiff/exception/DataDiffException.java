@@ -2,6 +2,10 @@ package io.sketch.datadiff.exception;
 
 /**
  * Base exception for all DataDiff operations.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class DataDiffException extends RuntimeException {
     

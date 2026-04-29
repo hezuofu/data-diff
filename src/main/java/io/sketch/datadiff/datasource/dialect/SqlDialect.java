@@ -4,6 +4,10 @@ import java.util.List;
 
 /**
  * SQL dialect interface for database-specific SQL generation.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public interface SqlDialect {
     

@@ -11,6 +11,10 @@ import java.util.concurrent.RecursiveTask;
 /**
  * ForkJoin-based segment processor for work-stealing parallelism.
  * More efficient for unbalanced workloads.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class ForkJoinSegmentProcessor implements AutoCloseable {
     

@@ -2,6 +2,10 @@ package io.sketch.datadiff.exception;
 
 /**
  * Exception thrown when checksum mismatch is detected.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class ChecksumMismatchException extends DataDiffException {
     

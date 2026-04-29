@@ -9,6 +9,10 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * MD5-based checksum calculator.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class Md5Checksum implements ChecksumCalculator {
     

@@ -17,6 +17,10 @@ import java.util.concurrent.Future;
 /**
  * Streaming comparator that processes large tables in chunks with memory control.
  * Uses streaming approach to avoid loading entire tables into memory.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class StreamingComparator {
     

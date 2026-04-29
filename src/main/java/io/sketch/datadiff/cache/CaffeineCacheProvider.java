@@ -8,6 +8,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Caffeine-based segment checksum cache provider.
+ *
+ * @author lanxia39@163.com
+ *
+ * @author lanxia39@163.com
  */
 public class CaffeineCacheProvider {
     
