@@ -27,7 +27,7 @@
         <jackson.version>2.16.1</jackson.version>
         <fastutil.version>8.5.13</fastutil.version>
         <jool.version>0.9.14</jool.version>
-        <snakeyaml.version>2.2</snakeyaml.version>
+        <typesafe-config.version>1.4.3</typesafe-config.version>
         <slf4j.version>2.0.11</slf4j.version>
         <log4j.version>2.22.1</log4j.version>
         <testcontainers.version>1.19.4</testcontainers.version>
@@ -63,9 +63,9 @@
 
         <!-- YAML Configuration -->
         <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>${snakeyaml.version}</version>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>${typesafe-config.version}</version>
         </dependency>
 
         <!-- High-performance Collections & Hash -->

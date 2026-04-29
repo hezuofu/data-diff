@@ -66,23 +66,23 @@ public class DataDiffApplication {
      */
     public static void run(AppConfig config) throws Exception {
         log.info("Starting Data Diff comparison...");
-        log.info("Algorithm: {}", config.getComparison().getAlgorithm());
-        log.info("Left table: {} at {}", config.getLeft().getTable(), config.getLeft().getUrl());
-        log.info("Right table: {} at {}", config.getRight().getTable(), config.getRight().getUrl());
+        log.info("Algorithm: {}", config.comparison().algorithm());
+        log.info("Left table: {} at {}", config.left().table(), config.left().url());
+        log.info("Right table: {} at {}", config.right().table(), config.right().url());
         
         // Create data sources
-        DataSource leftDataSource = createDataSource(config.getLeft());
-        DataSource rightDataSource = createDataSource(config.getRight());
+        DataSource leftDataSource = createDataSource(config.left());
+        DataSource rightDataSource = createDataSource(config.right());
         
         // Build table info
-        TableInfo leftTable = buildTableInfo(config.getLeft());
-        TableInfo rightTable = buildTableInfo(config.getRight());
+        TableInfo leftTable = buildTableInfo(config.left());
+        TableInfo rightTable = buildTableInfo(config.right());
         
         // Build comparison options
         CompareOptions options = buildOptions(config);
         
         // Create strategy based on algorithm
-        boolean useHashDiff = "hashdiff".equalsIgnoreCase(config.getComparison().getAlgorithm());
+        boolean useHashDiff = "hashdiff".equalsIgnoreCase(config.comparison().algorithm());
         var strategy = useHashDiff 
             ? new HashDiffEngine() 
             : new JoinDiffEngine();
@@ -102,10 +102,10 @@ public class DataDiffApplication {
      */
     private static DataSource createDataSource(AppConfig.DatabaseConfig dbConfig) {
         Properties props = new Properties();
-        props.setProperty("user", dbConfig.getUsername());
-        props.setProperty("password", dbConfig.getPassword());
+        props.setProperty("user", dbConfig.username());
+        props.setProperty("password", dbConfig.password());
         
-        return HikariCPProvider.createDataSource(dbConfig.getUrl(), props);
+        return HikariCPProvider.createDataSource(dbConfig.url(), props);
     }
     
     /**
@@ -114,11 +114,10 @@ public class DataDiffApplication {
     private static TableInfo buildTableInfo(AppConfig.DatabaseConfig dbConfig) {
         // Note: In production, you would fetch schema from database
         // For now, create a minimal TableInfo
-        List<String> primaryKey = dbConfig.getPrimaryKey() != null ? 
-            dbConfig.getPrimaryKey() : List.of("id");
+        List<String> primaryKey = dbConfig.primaryKey();
         
         return new TableInfo(
-            dbConfig.getTable(),
+            dbConfig.table(),
             List.of(), // Columns will be auto-detected
             primaryKey
         );
@@ -130,14 +129,15 @@ public class DataDiffApplication {
     private static CompareOptions buildOptions(AppConfig config) {
         CompareOptions.Builder builder = CompareOptions.builder()
             .algorithm(CompareOptions.Algorithm.valueOf(
-                config.getComparison().getAlgorithm().toUpperCase()))
-            .segmentSize(config.getComparison().getSegmentSize())
-            .parallelism(config.getComparison().getParallelism())
-            .maxBisectionDepth(config.getComparison().getMaxBisectionDepth())
-            .numericTolerance(config.getComparison().getNumericTolerance());
+                config.comparison().algorithm().toUpperCase()))
+            .segmentSize(config.comparison().segmentSize())
+            .parallelism(config.comparison().parallelism())
+            .maxBisectionDepth(config.comparison().maxBisectionDepth())
+            .numericTolerance(config.comparison().numericTolerance());
         
-        if (config.getLeft().getExcludeColumns() != null) {
-            builder.excludeColumns(config.getLeft().getExcludeColumns().toArray(new String[0]));
+        List<String> excludeColumns = config.left().excludeColumns();
+        if (!excludeColumns.isEmpty()) {
+            builder.excludeColumns(excludeColumns.toArray(new String[0]));
         }
         
         return builder.build();
@@ -147,9 +147,9 @@ public class DataDiffApplication {
      * Output diff result.
      */
     private static void outputResult(DiffResult result, AppConfig config) throws Exception {
-        ResultFormatter formatter = createFormatter(config.getOutput().getFormat());
+        ResultFormatter formatter = createFormatter(config.output().format());
         
-        String outputFile = config.getOutput().getOutputFile();
+        String outputFile = config.output().outputFile();
         
         try (OutputStream os = outputFile != null 
                 ? new FileOutputStream(outputFile) 
@@ -165,7 +165,7 @@ public class DataDiffApplication {
         }
         
         // Show stats if enabled
-        if (config.getOutput().isShowStats()) {
+        if (config.output().showStats()) {
             StatsFormatter statsFormatter = new StatsFormatter();
             statsFormatter.format(result, System.out);
         }
@@ -218,15 +218,15 @@ public class DataDiffApplication {
         System.out.println("  java -jar data-diff.jar [options]");
         System.out.println();
         System.out.println("Options:");
-        System.out.println("  --config, -c <file>   Configuration file path (default: application.yaml)");
+        System.out.println("  --config, -c <file>   Configuration file path (default: application.conf)");
         System.out.println("  --help, -h            Show this help message");
         System.out.println();
         System.out.println("Examples:");
         System.out.println("  java -jar data-diff.jar");
-        System.out.println("  java -jar data-diff.jar --config my-config.yaml");
+        System.out.println("  java -jar data-diff.jar --config my-config.conf");
         System.out.println();
-        System.out.println("Configuration file format: YAML");
-        System.out.println("See application.yaml for example configuration.");
+        System.out.println("Configuration file format: HOCON (Human-Optimized Config Object Notation)");
+        System.out.println("See application.conf for example configuration.");
     }
     
     /**

@@ -1,115 +1,214 @@
 package io.sketch.datadiff.config;
 
-import java.util.HashMap;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
+import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
- * Application configuration model.
+ * Typesafe configuration wrapper for application settings.
+ * Provides type-safe access to configuration values.
  * 
  * Author: lanxia39@163.com
  */
 public class AppConfig {
     
-    private DatabaseConfig left;
-    private DatabaseConfig right;
-    private ComparisonConfig comparison;
-    private OutputConfig output;
+    private final Config config;
+    
+    private AppConfig(Config config) {
+        this.config = config;
+    }
+    
+    /**
+     * Load configuration from default location (application.conf).
+     */
+    public static AppConfig load() {
+        Config config = ConfigFactory.load();
+        return new AppConfig(config);
+    }
+    
+    /**
+     * Load configuration from specific file.
+     */
+    public static AppConfig load(File file) {
+        Config config = ConfigFactory.parseFile(file)
+            .withFallback(ConfigFactory.load());
+        return new AppConfig(config);
+    }
+    
+    /**
+     * Load configuration from file path.
+     */
+    public static AppConfig load(String filePath) {
+        return load(new File(filePath));
+    }
+    
+    // ========== Database Configuration ==========
+    
+    public DatabaseConfig left() {
+        return new DatabaseConfig(config.getConfig("left"));
+    }
+    
+    public DatabaseConfig right() {
+        return new DatabaseConfig(config.getConfig("right"));
+    }
     
     public static class DatabaseConfig {
-        private String url;
-        private String username;
-        private String password;
-        private String driver;
-        private String table;
-        private List<String> primaryKey;
-        private List<String> excludeColumns;
-        private int maxConnections = 10;
+        private final Config config;
         
-        public String getUrl() { return url; }
-        public void setUrl(String url) { this.url = url; }
+        DatabaseConfig(Config config) {
+            this.config = config;
+        }
         
-        public String getUsername() { return username; }
-        public void setUsername(String username) { this.username = username; }
+        public String url() {
+            return config.getString("url");
+        }
         
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
+        public String username() {
+            return config.hasPath("username") ? config.getString("username") : "";
+        }
         
-        public String getDriver() { return driver; }
-        public void setDriver(String driver) { this.driver = driver; }
+        public String password() {
+            return config.hasPath("password") ? config.getString("password") : "";
+        }
         
-        public String getTable() { return table; }
-        public void setTable(String table) { this.table = table; }
+        public String driver() {
+            return config.hasPath("driver") ? config.getString("driver") : "";
+        }
         
-        public List<String> getPrimaryKey() { return primaryKey; }
-        public void setPrimaryKey(List<String> primaryKey) { this.primaryKey = primaryKey; }
+        public String table() {
+            return config.getString("table");
+        }
         
-        public List<String> getExcludeColumns() { return excludeColumns; }
-        public void setExcludeColumns(List<String> excludeColumns) { this.excludeColumns = excludeColumns; }
+        public List<String> primaryKey() {
+            return config.hasPath("primaryKey") 
+                ? config.getStringList("primaryKey") 
+                : List.of("id");
+        }
         
-        public int getMaxConnections() { return maxConnections; }
-        public void setMaxConnections(int maxConnections) { this.maxConnections = maxConnections; }
+        public List<String> excludeColumns() {
+            return config.hasPath("excludeColumns") 
+                ? config.getStringList("excludeColumns") 
+                : List.of();
+        }
+        
+        public int maxConnections() {
+            return config.hasPath("maxConnections") 
+                ? config.getInt("maxConnections") 
+                : 10;
+        }
+    }
+    
+    // ========== Comparison Configuration ==========
+    
+    public ComparisonConfig comparison() {
+        return config.hasPath("comparison") 
+            ? new ComparisonConfig(config.getConfig("comparison"))
+            : new ComparisonConfig(ConfigFactory.empty());
     }
     
     public static class ComparisonConfig {
-        private String algorithm = "hashdiff";
-        private int segmentSize = 50000;
-        private int parallelism = 4;
-        private int maxBisectionDepth = 10;
-        private double numericTolerance = 0.0;
-        private boolean caseInsensitive = false;
-        private Map<String, String> customComparators = new HashMap<>();
+        private final Config config;
         
-        public String getAlgorithm() { return algorithm; }
-        public void setAlgorithm(String algorithm) { this.algorithm = algorithm; }
+        ComparisonConfig(Config config) {
+            this.config = config;
+        }
         
-        public int getSegmentSize() { return segmentSize; }
-        public void setSegmentSize(int segmentSize) { this.segmentSize = segmentSize; }
+        public String algorithm() {
+            return config.hasPath("algorithm") 
+                ? config.getString("algorithm") 
+                : "hashdiff";
+        }
         
-        public int getParallelism() { return parallelism; }
-        public void setParallelism(int parallelism) { this.parallelism = parallelism; }
+        public int segmentSize() {
+            return config.hasPath("segmentSize") 
+                ? config.getInt("segmentSize") 
+                : 50000;
+        }
         
-        public int getMaxBisectionDepth() { return maxBisectionDepth; }
-        public void setMaxBisectionDepth(int maxBisectionDepth) { this.maxBisectionDepth = maxBisectionDepth; }
+        public int parallelism() {
+            return config.hasPath("parallelism") 
+                ? config.getInt("parallelism") 
+                : 4;
+        }
         
-        public double getNumericTolerance() { return numericTolerance; }
-        public void setNumericTolerance(double numericTolerance) { this.numericTolerance = numericTolerance; }
+        public int maxBisectionDepth() {
+            return config.hasPath("maxBisectionDepth") 
+                ? config.getInt("maxBisectionDepth") 
+                : 10;
+        }
         
-        public boolean isCaseInsensitive() { return caseInsensitive; }
-        public void setCaseInsensitive(boolean caseInsensitive) { this.caseInsensitive = caseInsensitive; }
+        public double numericTolerance() {
+            return config.hasPath("numericTolerance") 
+                ? config.getDouble("numericTolerance") 
+                : 0.0;
+        }
         
-        public Map<String, String> getCustomComparators() { return customComparators; }
-        public void setCustomComparators(Map<String, String> customComparators) { this.customComparators = customComparators; }
+        public boolean caseInsensitive() {
+            return config.hasPath("caseInsensitive") 
+                ? config.getBoolean("caseInsensitive") 
+                : false;
+        }
+        
+        public Map<String, String> customComparators() {
+            if (!config.hasPath("customComparators")) {
+                return Map.of();
+            }
+            return config.getObject("customComparators").entrySet().stream()
+                .collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    e -> e.getValue().unwrapped().toString()
+                ));
+        }
+    }
+    
+    // ========== Output Configuration ==========
+    
+    public OutputConfig output() {
+        return config.hasPath("output") 
+            ? new OutputConfig(config.getConfig("output"))
+            : new OutputConfig(ConfigFactory.empty());
     }
     
     public static class OutputConfig {
-        private String format = "json";
-        private String outputFile;
-        private boolean showStats = true;
-        private int maxRecords = 1000;
+        private final Config config;
         
-        public String getFormat() { return format; }
-        public void setFormat(String format) { this.format = format; }
+        OutputConfig(Config config) {
+            this.config = config;
+        }
         
-        public String getOutputFile() { return outputFile; }
-        public void setOutputFile(String outputFile) { this.outputFile = outputFile; }
+        public String format() {
+            return config.hasPath("format") 
+                ? config.getString("format") 
+                : "json";
+        }
         
-        public boolean isShowStats() { return showStats; }
-        public void setShowStats(boolean showStats) { this.showStats = showStats; }
+        public String outputFile() {
+            return config.hasPath("outputFile") 
+                ? config.getString("outputFile") 
+                : null;
+        }
         
-        public int getMaxRecords() { return maxRecords; }
-        public void setMaxRecords(int maxRecords) { this.maxRecords = maxRecords; }
+        public boolean showStats() {
+            return config.hasPath("showStats") 
+                ? config.getBoolean("showStats") 
+                : true;
+        }
+        
+        public int maxRecords() {
+            return config.hasPath("maxRecords") 
+                ? config.getInt("maxRecords") 
+                : 1000;
+        }
     }
     
-    public DatabaseConfig getLeft() { return left; }
-    public void setLeft(DatabaseConfig left) { this.left = left; }
-    
-    public DatabaseConfig getRight() { return right; }
-    public void setRight(DatabaseConfig right) { this.right = right; }
-    
-    public ComparisonConfig getComparison() { return comparison; }
-    public void setComparison(ComparisonConfig comparison) { this.comparison = comparison; }
-    
-    public OutputConfig getOutput() { return output; }
-    public void setOutput(OutputConfig output) { this.output = output; }
+    /**
+     * Get underlying Config object for advanced usage.
+     */
+    public Config underlying() {
+        return config;
+    }
 }

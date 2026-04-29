@@ -2,63 +2,49 @@ package io.sketch.datadiff.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yaml.snakeyaml.Yaml;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
 
 /**
- * Configuration loader for YAML files.
+ * Configuration loader facade for AppConfig.
+ * Provides convenient loading methods with validation.
  * 
  * Author: lanxia39@163.com
  */
 public class ConfigLoader {
     
     private static final Logger log = LoggerFactory.getLogger(ConfigLoader.class);
-    private static final String DEFAULT_CONFIG = "application.yaml";
     
     /**
      * Load configuration from file path.
      * 
-     * @param configPath Path to YAML configuration file
+     * @param configPath Path to HOCON configuration file
      * @return AppConfig instance
      */
     public static AppConfig load(String configPath) {
-        Path path = configPath != null ? Paths.get(configPath) : Paths.get(DEFAULT_CONFIG);
+        if (configPath == null || configPath.isEmpty()) {
+            log.info("Loading default configuration (application.conf)");
+            return AppConfig.load();
+        }
         
-        if (!Files.exists(path)) {
+        File file = new File(configPath);
+        if (!file.exists()) {
             throw new IllegalArgumentException(
-                String.format("Configuration file not found: %s", path.toAbsolutePath())
+                String.format("Configuration file not found: %s", file.getAbsolutePath())
             );
         }
         
-        log.info("Loading configuration from: {}", path.toAbsolutePath());
+        log.info("Loading configuration from: {}", file.getAbsolutePath());
+        AppConfig config = AppConfig.load(file);
         
-        try (InputStream input = new FileInputStream(path.toFile())) {
-            Yaml yaml = new Yaml();
-            AppConfig config = yaml.loadAs(input, AppConfig.class);
-            
-            if (config == null) {
-                throw new IllegalStateException("Failed to parse configuration file");
-            }
-            
-            validate(config);
-            log.info("Configuration loaded successfully");
-            return config;
-            
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load configuration file", e);
-        }
+        validate(config);
+        log.info("Configuration loaded successfully");
+        
+        return config;
     }
     
     /**
-     * Load configuration from default location (application.yaml).
-     * 
-     * @return AppConfig instance
+     * Load configuration from default location.
      */
     public static AppConfig loadDefault() {
         return load(null);
@@ -68,28 +54,22 @@ public class ConfigLoader {
      * Validate configuration.
      */
     private static void validate(AppConfig config) {
-        if (config.getLeft() == null || config.getRight() == null) {
-            throw new IllegalStateException("Both 'left' and 'right' database configurations are required");
+        // Validate database configurations
+        try {
+            config.left().url();
+            config.left().table();
+        } catch (Exception e) {
+            throw new IllegalStateException("Left database configuration is incomplete: " + e.getMessage());
         }
         
-        if (config.getLeft().getUrl() == null || config.getRight().getUrl() == null) {
-            throw new IllegalStateException("Database URL is required for both left and right databases");
-        }
-        
-        if (config.getLeft().getTable() == null) {
-            throw new IllegalStateException("Table name is required for left database");
-        }
-        
-        if (config.getComparison() == null) {
-            config.setComparison(new AppConfig.ComparisonConfig());
-        }
-        
-        if (config.getOutput() == null) {
-            config.setOutput(new AppConfig.OutputConfig());
+        try {
+            config.right().url();
+        } catch (Exception e) {
+            throw new IllegalStateException("Right database configuration is incomplete: " + e.getMessage());
         }
         
         // Validate algorithm
-        String algorithm = config.getComparison().getAlgorithm().toLowerCase();
+        String algorithm = config.comparison().algorithm().toLowerCase();
         if (!algorithm.equals("hashdiff") && !algorithm.equals("joindiff")) {
             throw new IllegalArgumentException(
                 String.format("Unsupported algorithm: %s. Must be 'hashdiff' or 'joindiff'", algorithm)
@@ -97,7 +77,7 @@ public class ConfigLoader {
         }
         
         // Validate output format
-        String format = config.getOutput().getFormat().toLowerCase();
+        String format = config.output().format().toLowerCase();
         if (!format.equals("json") && !format.equals("csv") && 
             !format.equals("table") && !format.equals("stats")) {
             throw new IllegalArgumentException(
