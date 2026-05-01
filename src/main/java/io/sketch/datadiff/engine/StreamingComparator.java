@@ -64,7 +64,7 @@ public class StreamingComparator {
         BigInteger currentKey = minKey;
         
         while (currentKey.compareTo(maxKey) <= 0) {
-            BigInteger nextKey = currentKey.add(BigInteger.valueOf(options.getSegmentSize()));
+            BigInteger nextKey = currentKey.add(BigInteger.valueOf(options.getBisectionFactor()));
             
             List<DiffRecord> chunkDiffs = compareChunk(currentKey, nextKey.subtract(BigInteger.ONE));
             allDiffs.addAll(chunkDiffs);
@@ -220,12 +220,12 @@ public class StreamingComparator {
         BigInteger maxKey = getMaxKey(rightDataSource, rightTable, pkColumn);
         
         BigInteger range = maxKey.subtract(minKey).add(BigInteger.ONE);
-        long chunkSize = options.getSegmentSize();
+        long chunkSize = options.getBisectionFactor();
         int numChunks = (int) Math.ceil(range.doubleValue() / chunkSize);
         
         List<Future<List<DiffRecord>>> futures = new ArrayList<>();
         
-        ExecutorService executor = Executors.newFixedThreadPool(options.getParallelism());
+        ExecutorService executor = Executors.newFixedThreadPool(options.getThreads());
         try {
             BigInteger currentKey = minKey;
             

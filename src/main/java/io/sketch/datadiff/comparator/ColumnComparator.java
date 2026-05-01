@@ -36,7 +36,7 @@ public class ColumnComparator {
             return false;
         }
         
-        // Check if case-insensitive comparison
+        // Check if case-insensitive comparison (global or column-level)
         if (options.isCaseInsensitive(columnName)) {
             return left.toString().equalsIgnoreCase(right.toString());
         }

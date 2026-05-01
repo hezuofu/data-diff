@@ -24,6 +24,10 @@ public class Md5Checksum implements ChecksumCalculator {
         
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
+            // Add type information to prevent collisions between different types with same string representation
+            String typePrefix = value.getClass().getName() + ":";
+            md.update(typePrefix.getBytes(StandardCharsets.UTF_8));
+            
             byte[] bytes = value.toString().getBytes(StandardCharsets.UTF_8);
             byte[] hash = md.digest(bytes);
             return new BigInteger(1, hash);

@@ -20,8 +20,8 @@ public interface SplitStrategy {
      * @param minKey minimum key value
      * @param maxKey maximum key value
      * @param totalCount total number of rows
-     * @param segmentSize target size for each segment
+     * @param bisectionFactor number of initial segments to split into
      * @return list of segments covering the range
      */
-    List<Segment> split(BigInteger minKey, BigInteger maxKey, long totalCount, long segmentSize);
+    List<Segment> split(BigInteger minKey, BigInteger maxKey, long totalCount, long bisectionFactor);
 }

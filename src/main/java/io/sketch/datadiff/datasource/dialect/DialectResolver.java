@@ -22,6 +22,7 @@ public class DialectResolver {
         registerDialect("jdbc:mariadb:", new MySqlDialect());
         registerDialect("jdbc:postgresql:", new PostgreSqlDialect());
         registerDialect("jdbc:snowflake:", new SnowflakeDialect());
+        registerDialect("jdbc:h2:", new H2Dialect());
     }
     
     /**

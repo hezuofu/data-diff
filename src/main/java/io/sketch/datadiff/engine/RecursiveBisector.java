@@ -33,7 +33,7 @@ public class RecursiveBisector {
     private final TableInfo rightTable;
     private final SqlDialect dialect;
     private final JdbcQueryExecutor queryExecutor;
-    private final int maxDepth;
+    private final long bisectionThreshold;
     
     private int currentMaxDepth = 0;
     private int iterations = 0;
@@ -44,7 +44,7 @@ public class RecursiveBisector {
         TableInfo leftTable,
         TableInfo rightTable,
         SqlDialect dialect,
-        int maxDepth
+        long bisectionThreshold
     ) {
         this.leftDataSource = leftDataSource;
         this.rightDataSource = rightDataSource;
@@ -52,7 +52,7 @@ public class RecursiveBisector {
         this.rightTable = rightTable;
         this.dialect = dialect;
         this.queryExecutor = new JdbcQueryExecutor();
-        this.maxDepth = maxDepth;
+        this.bisectionThreshold = bisectionThreshold;
     }
     
     /**
@@ -72,8 +72,8 @@ public class RecursiveBisector {
     private List<DiffRecord> bisectRecursive(Segment segment, int depth) throws SQLException {
         List<DiffRecord> diffs = new ArrayList<>();
         
-        // Base case: reached max depth or segment is small enough
-        if (depth >= maxDepth || segment.count() <= 10) {
+        // Base case: segment is small enough (below bisection threshold)
+        if (segment.count() <= bisectionThreshold) {
             return extractDiffRows(segment);
         }
         

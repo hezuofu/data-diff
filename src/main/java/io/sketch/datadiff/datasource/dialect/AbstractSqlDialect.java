@@ -25,7 +25,7 @@ public abstract class AbstractSqlDialect implements SqlDialect {
     
     @Override
     public String minMaxQuery(String tableName, String columnName) {
-        return "SELECT MIN(%s) as min_val, MAX(%s) as max_val FROM %s".formatted(
+        return "SELECT MIN(%s) as \"min_val\", MAX(%s) as \"max_val\" FROM %s".formatted(
             quoteIdentifier(columnName),
             quoteIdentifier(columnName),
             quoteIdentifier(tableName)
@@ -52,8 +52,8 @@ public abstract class AbstractSqlDialect implements SqlDialect {
         String hashExpr = hashExpression(columns);
         return """
             SELECT 
-              SUM(%s) as checksum,
-              COUNT(*) as row_count
+              SUM(%s) as \"checksum\",
+              COUNT(*) as \"row_count\"
             FROM %s
             WHERE %s BETWEEN %d AND %d
             """.formatted(

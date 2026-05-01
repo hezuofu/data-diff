@@ -106,6 +106,16 @@ public class JoinDiffEngine implements ComparisonStrategy {
         String leftName = leftTable.tableName();
         String rightName = rightTable.tableName();
         
+        // Build aliased column lists
+        String leftCols = compareColumns.stream()
+            .map(col -> "l." + col + " as l_" + col)
+            .reduce((a, b) -> a + ", " + b)
+            .orElse("*");
+        String rightCols = compareColumns.stream()
+            .map(col -> "r." + col + " as r_" + col)
+            .reduce((a, b) -> a + ", " + b)
+            .orElse("*");
+        
         // Build hash comparison expression
         String leftHash = buildHashExpression("l", compareColumns);
         String rightHash = buildHashExpression("r", compareColumns);
@@ -118,9 +128,9 @@ public class JoinDiffEngine implements ComparisonStrategy {
                 WHEN r.%1$s IS NULL THEN 'LEFT_ONLY'
                 WHEN %2$s != %3$s THEN 'MODIFIED'
               END as diff_type,
-              l.*, r.*
+              %6$s, %7$s
             FROM %4$s l
-            FULL OUTER JOIN %5$s r ON l.%1$s = r.%1$s
+            FULL JOIN %5$s r ON l.%1$s = r.%1$s
             WHERE l.%1$s IS NULL 
                OR r.%1$s IS NULL 
                OR %2$s != %3$s
@@ -129,7 +139,9 @@ public class JoinDiffEngine implements ComparisonStrategy {
             leftHash,
             rightHash,
             leftName,
-            rightName
+            rightName,
+            leftCols,
+            rightCols
         );
     }
     

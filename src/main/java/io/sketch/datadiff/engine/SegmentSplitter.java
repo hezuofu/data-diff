@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Segment splitter that divides data ranges into manageable chunks.
+ * Uses bisection factor (number of initial segments) rather than fixed segment size.
  *
  * @author lanxia39@163.com
  *
@@ -17,19 +18,21 @@ import java.util.List;
 public class SegmentSplitter implements SplitStrategy {
     
     @Override
-    public List<Segment> split(BigInteger minKey, BigInteger maxKey, long totalCount, long segmentSize) {
+    public List<Segment> split(BigInteger minKey, BigInteger maxKey, long totalCount, long bisectionFactor) {
         if (minKey.compareTo(maxKey) > 0) {
             throw new IllegalArgumentException("minKey must be <= maxKey");
         }
-        if (segmentSize <= 0) {
-            throw new IllegalArgumentException("segmentSize must be > 0");
+        if (bisectionFactor <= 0) {
+            throw new IllegalArgumentException("bisectionFactor must be > 0");
         }
         
         List<Segment> segments = new ArrayList<>();
         BigInteger range = maxKey.subtract(minKey).add(BigInteger.ONE);
-        long numSegments = Math.max(1, totalCount / segmentSize);
-        BigInteger segmentRange = range.divide(BigInteger.valueOf(numSegments));
         
+        long numSegments = Math.min(bisectionFactor, Math.max(1, totalCount));
+        if (numSegments == 0) numSegments = 1;
+        
+        BigInteger segmentRange = range.divide(BigInteger.valueOf(numSegments));
         if (segmentRange.equals(BigInteger.ZERO)) {
             segmentRange = BigInteger.ONE;
         }
@@ -38,14 +41,21 @@ public class SegmentSplitter implements SplitStrategy {
         long remainingCount = totalCount;
         
         while (current.compareTo(maxKey) <= 0) {
-            BigInteger next = current.add(segmentRange).subtract(BigInteger.ONE);
-            if (next.compareTo(maxKey) > 0) {
+            BigInteger next;
+            if (segments.size() == numSegments - 1) {
                 next = maxKey;
+            } else {
+                next = current.add(segmentRange).subtract(BigInteger.ONE);
+                if (next.compareTo(maxKey) > 0) {
+                    next = maxKey;
+                }
             }
             
-            long segmentCount = remainingCount / (numSegments - segments.size());
+            long divisor = numSegments - segments.size();
+            long segmentCount = divisor > 0 ? remainingCount / divisor : remainingCount;
             segments.add(new Segment(current, next, segmentCount));
             
+            remainingCount -= segmentCount;
             current = next.add(BigInteger.ONE);
         }
         

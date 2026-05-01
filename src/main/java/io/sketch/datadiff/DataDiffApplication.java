@@ -82,10 +82,11 @@ public class DataDiffApplication {
         CompareOptions options = buildOptions(config);
         
         // Create strategy based on algorithm
-        boolean useHashDiff = "hashdiff".equalsIgnoreCase(config.comparison().algorithm());
-        var strategy = useHashDiff 
-            ? new HashDiffEngine() 
-            : new JoinDiffEngine();
+        var strategy = switch (config.comparison().algorithm().toLowerCase()) {
+            case "hash", "hashdiff" -> new HashDiffEngine();
+            case "join", "joindiff" -> new JoinDiffEngine();
+            default -> new HashDiffEngine();
+        };
         
         // Create and execute engine
         DataDiffEngine engine = DataDiffEngine.create(leftDataSource, rightDataSource, strategy);
@@ -128,12 +129,19 @@ public class DataDiffApplication {
      */
     private static CompareOptions buildOptions(AppConfig config) {
         CompareOptions.Builder builder = CompareOptions.builder()
-            .algorithm(CompareOptions.Algorithm.valueOf(
-                config.comparison().algorithm().toUpperCase()))
-            .segmentSize(config.comparison().segmentSize())
-            .parallelism(config.comparison().parallelism())
-            .maxBisectionDepth(config.comparison().maxBisectionDepth())
-            .numericTolerance(config.comparison().numericTolerance());
+            .strategy(mapStrategy(config.comparison().algorithm()))
+            .bisectionFactor(config.comparison().bisectionFactor())
+            .threads(config.comparison().threads())
+            .bisectionThreshold(config.comparison().bisectionThreshold())
+            .numericTolerance(config.comparison().numericTolerance())
+            .ignoreCase(config.comparison().caseInsensitive());
+        
+        if (config.comparison().whereClause() != null) {
+            builder.whereClause(config.comparison().whereClause());
+        }
+        if (config.comparison().updateColumn() != null) {
+            builder.updateColumn(config.comparison().updateColumn());
+        }
         
         List<String> excludeColumns = config.left().excludeColumns();
         if (!excludeColumns.isEmpty()) {
@@ -141,6 +149,14 @@ public class DataDiffApplication {
         }
         
         return builder.build();
+    }
+    
+    private static CompareOptions.StrategyType mapStrategy(String algorithm) {
+        return switch (algorithm.toLowerCase()) {
+            case "hash", "hashdiff" -> CompareOptions.StrategyType.HASH;
+            case "join", "joindiff" -> CompareOptions.StrategyType.JOIN;
+            default -> CompareOptions.StrategyType.AUTO;
+        };
     }
     
     /**

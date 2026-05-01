@@ -123,23 +123,37 @@ public class AppConfig {
                 : "hashdiff";
         }
         
-        public int segmentSize() {
-            return config.hasPath("segmentSize") 
-                ? config.getInt("segmentSize") 
-                : 50000;
+        // ===== Algorithm tuning (new names preferred, fall back to old) =====
+        
+        public int bisectionFactor() {
+            if (config.hasPath("bisectionFactor")) return config.getInt("bisectionFactor");
+            if (config.hasPath("segmentSize")) return config.getInt("segmentSize");
+            return 32;
         }
         
-        public int parallelism() {
-            return config.hasPath("parallelism") 
-                ? config.getInt("parallelism") 
-                : 4;
+        public int bisectionThreshold() {
+            if (config.hasPath("bisectionThreshold")) return config.getInt("bisectionThreshold");
+            if (config.hasPath("maxBisectionDepth")) return config.getInt("maxBisectionDepth");
+            return 16384;
         }
         
-        public int maxBisectionDepth() {
-            return config.hasPath("maxBisectionDepth") 
-                ? config.getInt("maxBisectionDepth") 
-                : 10;
+        public int threads() {
+            if (config.hasPath("threads")) return config.getInt("threads");
+            if (config.hasPath("parallelism")) return config.getInt("parallelism");
+            return 4;
         }
+        
+        // ===== Data range =====
+        
+        public String updateColumn() {
+            return config.hasPath("updateColumn") ? config.getString("updateColumn") : null;
+        }
+        
+        public String whereClause() {
+            return config.hasPath("whereClause") ? config.getString("whereClause") : null;
+        }
+        
+        // ===== Comparison options =====
         
         public double numericTolerance() {
             return config.hasPath("numericTolerance") 

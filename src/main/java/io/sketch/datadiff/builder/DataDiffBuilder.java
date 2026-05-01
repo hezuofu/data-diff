@@ -47,9 +47,10 @@ public class DataDiffBuilder {
         
         CompareOptions opts = options != null ? options : CompareOptions.defaults();
         
-        var strategy = switch (opts.getAlgorithm()) {
-            case HASHDIFF -> new HashDiffEngine();
-            case JOINDIFF -> new JoinDiffEngine();
+        var strategy = switch (opts.getStrategy()) {
+            case HASH -> new HashDiffEngine();
+            case JOIN -> new JoinDiffEngine();
+            case AUTO -> new HashDiffEngine(); // Default to HashDiff for cross-database safety
         };
         
         return DataDiffEngine.create(leftDataSource, rightDataSource, strategy);

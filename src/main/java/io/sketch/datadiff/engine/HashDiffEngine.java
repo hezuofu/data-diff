@@ -55,12 +55,17 @@ public class HashDiffEngine implements ComparisonStrategy {
             long leftCount = getRowCount(leftDataSource, leftTable);
             long rightCount = getRowCount(rightDataSource, rightTable);
             
-            BigInteger minKey = getMinKey(leftDataSource, leftTable);
-            BigInteger maxKey = getMaxKey(rightDataSource, rightTable);
+            // Use provided key ranges if set, otherwise auto-detect
+            BigInteger minKey = options.getMinKey() != null 
+                ? toBigInteger(options.getMinKey()) 
+                : getMinKey(leftDataSource, leftTable);
+            BigInteger maxKey = options.getMaxKey() != null 
+                ? toBigInteger(options.getMaxKey()) 
+                : getMaxKey(rightDataSource, rightTable);
             
-            // Split into segments
+            // Split into segments using bisection factor
             List<Segment> segments = segmentSplitter.split(
-                minKey, maxKey, Math.max(leftCount, rightCount), options.getSegmentSize()
+                minKey, maxKey, Math.max(leftCount, rightCount), options.getBisectionFactor()
             );
             
             log.info("Split data into {} segments", segments.size());
@@ -99,15 +104,15 @@ public class HashDiffEngine implements ComparisonStrategy {
     ) throws SQLException {
         List<DiffRecord> allDiffs = new ArrayList<>();
         
-        // Use fixed thread pool for parallel processing (Java 17)
-        ExecutorService executor = Executors.newFixedThreadPool(options.getParallelism());
+        // Use fixed thread pool for parallel processing
+        ExecutorService executor = Executors.newFixedThreadPool(options.getThreads());
         try {
             List<Future<List<DiffRecord>>> futures = new ArrayList<>();
             
             for (Segment segment : segments) {
                 futures.add(executor.submit(() -> 
                     processSegment(leftDataSource, rightDataSource, 
-                        leftTable, rightTable, segment)
+                        leftTable, rightTable, segment, options)
                 ));
             }
             
@@ -132,7 +137,8 @@ public class HashDiffEngine implements ComparisonStrategy {
         DataSource rightDataSource,
         TableInfo leftTable,
         TableInfo rightTable,
-        Segment segment
+        Segment segment,
+        CompareOptions options
     ) throws SQLException {
         // Compute checksums for both sides
         BigInteger leftChecksum = computeSegmentChecksum(leftDataSource, leftTable, segment);
@@ -147,11 +153,11 @@ public class HashDiffEngine implements ComparisonStrategy {
         log.debug("Segment {} checksums mismatch, bisecting...", segment);
         
         // Bisect to find differences
-        SqlDialect dialect = DialectResolver.resolve("jdbc:mysql:");
+        SqlDialect dialect = resolveDialect(leftDataSource);
         RecursiveBisector bisector = new RecursiveBisector(
             leftDataSource, rightDataSource,
             leftTable, rightTable,
-            dialect, 32
+            dialect, options.getBisectionThreshold()
         );
         
         return bisector.bisect(segment);
@@ -168,7 +174,7 @@ public class HashDiffEngine implements ComparisonStrategy {
             columns.add(col.name());
         }
         
-        SqlDialect dialect = DialectResolver.resolve("jdbc:mysql:");
+        SqlDialect dialect = resolveDialect(dataSource);
         String sql = dialect.checksumQuery(
             table.tableName(),
             columns,
@@ -184,12 +190,30 @@ public class HashDiffEngine implements ComparisonStrategy {
             }
             
             Object checksumObj = results.get(0).get("checksum");
-            return checksumObj != null ? new BigInteger(checksumObj.toString()) : BigInteger.ZERO;
+            if (checksumObj == null) return BigInteger.ZERO;
+            
+            if (checksumObj instanceof java.math.BigDecimal bd) {
+                return bd.toBigInteger();
+            }
+            return new BigInteger(checksumObj.toString());
+        }
+    }
+
+    private BigInteger toBigInteger(Comparable<?> val) {
+        if (val instanceof BigInteger bi) return bi;
+        if (val instanceof Number num) return BigInteger.valueOf(num.longValue());
+        return new BigInteger(val.toString());
+    }
+
+    private SqlDialect resolveDialect(DataSource dataSource) throws SQLException {
+        try (var conn = dataSource.getConnection()) {
+            String url = conn.getMetaData().getURL();
+            return DialectResolver.resolve(url);
         }
     }
     
     private long getRowCount(DataSource dataSource, TableInfo table) throws SQLException {
-        SqlDialect dialect = DialectResolver.resolve("jdbc:mysql:");
+        SqlDialect dialect = resolveDialect(dataSource);
         String sql = dialect.countQuery(table.tableName(), null);
         
         try (var conn = dataSource.getConnection()) {
@@ -199,25 +223,29 @@ public class HashDiffEngine implements ComparisonStrategy {
     
     private BigInteger getMinKey(DataSource dataSource, TableInfo table) throws SQLException {
         String pkColumn = table.primaryKey().get(0);
-        SqlDialect dialect = DialectResolver.resolve("jdbc:mysql:");
+        SqlDialect dialect = resolveDialect(dataSource);
         String sql = dialect.minMaxQuery(table.tableName(), pkColumn);
         
         try (var conn = dataSource.getConnection()) {
             var results = queryExecutor.executeQuery(conn, sql);
-            Object minVal = results.get(0).get("min_val");
-            return minVal != null ? new BigInteger(minVal.toString()) : BigInteger.ZERO;
+            if (results.isEmpty() || results.get(0).get("min_val") == null) {
+                return BigInteger.ZERO;
+            }
+            return new BigInteger(results.get(0).get("min_val").toString());
         }
     }
     
     private BigInteger getMaxKey(DataSource dataSource, TableInfo table) throws SQLException {
         String pkColumn = table.primaryKey().get(0);
-        SqlDialect dialect = DialectResolver.resolve("jdbc:mysql:");
+        SqlDialect dialect = resolveDialect(dataSource);
         String sql = dialect.minMaxQuery(table.tableName(), pkColumn);
         
         try (var conn = dataSource.getConnection()) {
             var results = queryExecutor.executeQuery(conn, sql);
-            Object maxVal = results.get(0).get("max_val");
-            return maxVal != null ? new BigInteger(maxVal.toString()) : BigInteger.ZERO;
+            if (results.isEmpty() || results.get(0).get("max_val") == null) {
+                return BigInteger.ZERO;
+            }
+            return new BigInteger(results.get(0).get("max_val").toString());
         }
     }
     
