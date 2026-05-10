@@ -5,6 +5,7 @@ import io.sketch.datadiff.core.model.CompareOptions;
 import io.sketch.datadiff.engine.DataDiffEngine;
 import io.sketch.datadiff.engine.HashDiffEngine;
 import io.sketch.datadiff.engine.JoinDiffEngine;
+import io.sketch.datadiff.engine.StreamComparator;
 
 import javax.sql.DataSource;
 
@@ -50,6 +51,7 @@ public class DataDiffBuilder {
         var strategy = switch (opts.getStrategy()) {
             case HASH -> new HashDiffEngine();
             case JOIN -> new JoinDiffEngine();
+            case STREAM -> new StreamComparator();
             case AUTO -> new HashDiffEngine(); // Default to HashDiff for cross-database safety
         };
         

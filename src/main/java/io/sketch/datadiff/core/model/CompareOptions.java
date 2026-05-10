@@ -17,6 +17,7 @@ public class CompareOptions {
     public enum StrategyType {
         HASH,
         JOIN,
+        STREAM,
         AUTO
     }
 
