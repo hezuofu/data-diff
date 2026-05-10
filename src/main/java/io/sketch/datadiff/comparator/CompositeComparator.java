@@ -80,8 +80,8 @@ public class CompositeComparator {
         
         double leftNum = ((Number) left).doubleValue();
         double rightNum = ((Number) right).doubleValue();
-        
-        return Math.abs(leftNum - rightNum) < 0.0001; // Default tolerance
+        // Default tolerance
+        return Math.abs(leftNum - rightNum) < 0.0001;
     }
     
     private boolean compareString(Object left, Object right) {
